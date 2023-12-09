@@ -12,8 +12,9 @@
     </p>
     <input type="text" id="guessField" />
     <input type="submit" value="猜!" id="guessSubmit" />
-    <input type="submit" value="再玩一次" id="rePlay" />
+    <input type="submit" value="再玩一次" id="reStart" />
     <p class="message"></p>
+    <p class="second"></p>
     <div class="result"></div>
   </body>
   <script>
@@ -24,17 +25,21 @@
     // Get element
     const guessField = document.getElementById("guessField");
     const guessSubmit = document.getElementById("guessSubmit");
-    const rePlay = document.getElementById("rePlay");    
+    const reStart = document.getElementById("reStart");    
     const message = document.querySelector(".message");
     const lowerbound = document.querySelector(".lowerbound");
     const higherbound = document.querySelector(".higherbound");
     const result = document.querySelector(".result");
+    const second = document.querySelector(".second");
 
     // Event listener
     let guessCount = 0;
 
     guessSubmit.addEventListener("click", checkGuess);
-
+    
+    // restart the game
+    reStart.addEventListener("click", resetStatus)
+    
     // Guess function
     function checkGuess() {
       const userGuess = parseInt(guessField.value);
@@ -51,17 +56,28 @@
         return
       } else if (userGuess < targetNumber) {
         if(guessCount === 5) {
-            guessCountDetect()       
+            guessCountExceed()   
+            delayedDisplay("5", 1000, display)  
+            delayedDisplay("4", 2000, display)  
+            delayedDisplay("3", 3000, display)  
+            delayedDisplay("2", 4000, display)  
+            delayedDisplay("1", 5000, display)  
+            delayedDisplay("", 6000, resetStatus)  
             return;
         } else if (userGuess > lowerbound.textContent) {
             lowerbound.textContent = userGuess;
         }
-
         message.textContent = "太小了，再試一次。";
         message.style.color = "red";    
       } else if (userGuess > targetNumber && userGuess < higherbound.textContent) {
         if(guessCount === 5) {
-            guessCountDetect()       
+            guessCountExceed()  
+            delayedDisplay("5", 1000, display)  
+            delayedDisplay("4", 2000, display)  
+            delayedDisplay("3", 3000, display)  
+            delayedDisplay("2", 4000, display)  
+            delayedDisplay("1", 5000, display)  
+            delayedDisplay("", 6000, resetStatus)       
             return;
         } else if (userGuess < higherbound.textContent) {
             higherbound.textContent = userGuess;
@@ -69,20 +85,18 @@
         message.textContent = "太大了，再試一次。";
         message.style.color = "red";
       }
-
         guessField.value = "";
         guessField.focus();
+    }
         
-        function guessCountDetect() {
-            if(guessCount === 5) {
-                message.textContent = `You Failed! 答案是 ${targetNumber}`;
-                message.style.color = "red";
-                guessSubmit.disabled = true;
-            } 
-        }
+    function guessCountExceed() {
+        message.textContent = `You Failed! 答案是 ${targetNumber}`;
+        message.style.color = "red";
+        guessSubmit.disabled = true;     
     }
 
-    rePlay.addEventListener("click", function() {
+    function resetStatus () {
+
         message.textContent = "";
         result.innerHTML = "";
         guessField.value = "";
@@ -91,6 +105,18 @@
         targetNumber = Math.floor(Math.random() * 100) + 1;
         guessCount = 0;
         guessSubmit.disabled = false;
-    })
+        }
+  
+    function display(result) {
+        console.log(result)
+    }
+
+    function delayedDisplay(string, ms, callback) {
+        setTimeout(function() {
+            second.textContent = string;
+            callback();
+        }, ms);
+    }
+
   </script>
 </html>
