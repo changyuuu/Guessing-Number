@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="zh-Hant-TW">
+  <head>
+    <title>猜數字遊戲</title>
+    <meta charset="utf-8" />
+  </head>
+  <body>
+    <h1>猜數字遊戲</h1>
+    <p>
+      <span class="lowerbound">1</span> 到
+      <span class="higherbound">100</span> 之間的數字，你猜是多少？
+    </p>
+    <input type="text" id="guessField" />
+    <input type="submit" value="猜!" id="guessSubmit" />
+    <p class="message"></p>
+    <div class="result"></div>
+  </body>
+  <script>
+    // Random number
+    const targetNumber = Math.floor(Math.random() * 100) + 1;
+    console.log("answer: " + targetNumber);
+
+    // Get element
+    const guessField = document.getElementById("guessField");
+    const guessSubmit = document.getElementById("guessSubmit");
+    const message = document.querySelector(".message");
+    const lowerbound = document.querySelector(".lowerbound");
+    const higherbound = document.querySelector(".higherbound");
+    const result = document.querySelector(".result");
+    // Event listener
+    let guessCount = 0;
+
+    guessSubmit.addEventListener("click", checkGuess);
+
+    // Guess function
+    function checkGuess() {
+      const userGuess = parseInt(guessField.value);
+      console.log("userGuess: " + userGuess);
+      guessCount++;
+
+      if (userGuess === targetNumber) {
+        message.textContent = `恭喜你，你猜對了！你這次猜了 ${guessCount} 次哦～`;
+        message.style.color = "green";
+        result.innerHTML = `
+            <p>正確答案是<strong> ${targetNumber} <strong/></p>
+            <iframe src="https://giphy.com/embed/11IfCrxlB9E7io" width="480" height="270" frameBorder="0" class="giphy-embed" allowFullScreen></iframe>`;
+        guessSubmit.disabled = true;
+      } else if (userGuess < targetNumber) {
+        message.textContent = "太小了，再試一次。";
+        message.style.color = "red";    
+        if(userGuess > lowerbound.textContent) {
+            lowerbound.textContent = userGuess;
+        } 
+      } else if (userGuess > targetNumber) {
+        message.textContent = "太大了，再試一次。";
+        message.style.color = "red";
+        if(userGuess < higherbound.textContent) {
+            higherbound.textContent = userGuess;
+        }
+      }
+      guessField.value = "";
+      guessField.focus();
+    }
+  </script>
+</html>
