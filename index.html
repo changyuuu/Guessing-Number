@@ -45,21 +45,39 @@
             <p>正確答案是<strong> ${targetNumber} <strong/></p>
             <iframe src="https://giphy.com/embed/11IfCrxlB9E7io" width="480" height="270" frameBorder="0" class="giphy-embed" allowFullScreen></iframe>`;
         guessSubmit.disabled = true;
+        return
       } else if (userGuess < targetNumber) {
+        if(guessCount === 5) {
+            guessCountDetect()       
+            return;
+        } else if (userGuess > lowerbound.textContent) {
+            lowerbound.textContent = userGuess;
+        }
+
         message.textContent = "太小了，再試一次。";
         message.style.color = "red";    
-        if(userGuess > lowerbound.textContent) {
-            lowerbound.textContent = userGuess;
-        } 
-      } else if (userGuess > targetNumber) {
-        message.textContent = "太大了，再試一次。";
-        message.style.color = "red";
-        if(userGuess < higherbound.textContent) {
+      } else if (userGuess > targetNumber && userGuess < higherbound.textContent) {
+        if(guessCount === 5) {
+            guessCountDetect()       
+            return;
+        } else if (userGuess < higherbound.textContent) {
             higherbound.textContent = userGuess;
         }
+        message.textContent = "太大了，再試一次。";
+        message.style.color = "red";
       }
-      guessField.value = "";
-      guessField.focus();
+
+        guessField.value = "";
+        guessField.focus();
+
+
+        function guessCountDetect() {
+            if(guessCount === 5) {
+                message.textContent = `You Failed! 答案是 ${targetNumber}`;
+                message.style.color = "red";
+                guessSubmit.disabled = true;
+            } 
+        }
     }
   </script>
 </html>
