@@ -12,21 +12,24 @@
     </p>
     <input type="text" id="guessField" />
     <input type="submit" value="猜!" id="guessSubmit" />
+    <input type="submit" value="再玩一次" id="rePlay" />
     <p class="message"></p>
     <div class="result"></div>
   </body>
   <script>
     // Random number
-    const targetNumber = Math.floor(Math.random() * 100) + 1;
+    let targetNumber = Math.floor(Math.random() * 100) + 1;
     console.log("answer: " + targetNumber);
 
     // Get element
     const guessField = document.getElementById("guessField");
     const guessSubmit = document.getElementById("guessSubmit");
+    const rePlay = document.getElementById("rePlay");    
     const message = document.querySelector(".message");
     const lowerbound = document.querySelector(".lowerbound");
     const higherbound = document.querySelector(".higherbound");
     const result = document.querySelector(".result");
+
     // Event listener
     let guessCount = 0;
 
@@ -69,8 +72,7 @@
 
         guessField.value = "";
         guessField.focus();
-
-
+        
         function guessCountDetect() {
             if(guessCount === 5) {
                 message.textContent = `You Failed! 答案是 ${targetNumber}`;
@@ -79,5 +81,16 @@
             } 
         }
     }
+
+    rePlay.addEventListener("click", function() {
+        message.textContent = "";
+        result.innerHTML = "";
+        guessField.value = "";
+        lowerbound.textContent = 1;
+        higherbound.textContent = 100; 
+        targetNumber = Math.floor(Math.random() * 100) + 1;
+        guessCount = 0;
+        guessSubmit.disabled = false;
+    })
   </script>
 </html>
